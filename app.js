@@ -4,7 +4,7 @@ const connection = require('./db');
 const port = 3001;
 const app = express();
 
-app.get('/place/list', (req, res) => {
+app.get('/place', (req, res) => {
 	connection.query('SELECT * FROM place_list', (err, results, field) => {
 		if(err) {
 			console.log('FAIL - API CONNECTION :: \n', err);
@@ -16,7 +16,7 @@ app.get('/place/list', (req, res) => {
 	});
 });
 
-app.post('/place/apply', (req, res) => {
+app.post('/place', (req, res) => {
 	connection.query('INSERT INTO place_list(NAME, TITLE, ADDR, MEMO, DATE) VALUES(?)', req.body, (err, results) => {
 		if(err) {
 			console.log('FAIL - API CONNECTION :: \n', err);
