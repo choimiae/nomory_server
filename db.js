@@ -1,18 +1,22 @@
+const mysql = require('mysql2/promise');
 
-const mysql = require('mysql2');
+const connectDB = async () => {
+	try {
+		const connect = await mysql.createConnection({
+			host:"localhost",
+			port: 3306,
+			user: 'root',
+			password: 'root',
+			database: 'nomory_db'
+		});
 
-const connection = mysql.createConnection({
-	host:'localhost',
-	port:3306,
-	user: 'root',
-	password: 'root',
-	database: 'nomory_db'
-})
+		console.log("✅ DB CONNECTED");
 
-connection.connect((err) => {
-	if(err) {
-		console.log('FAIL - DB CONNECTION :: \n', err)
-		return;
+		return connect;
+	} catch (err) {
+		console.error("❌ FAIL - DB CONNECTION :: \n", err);
+		throw err;
 	}
-	console.log('DB CONNECT');
-})
+}
+
+module.exports = connectDB;
