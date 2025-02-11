@@ -15,13 +15,15 @@ app.use(express.json());
 
 // 장소 등록
 app.post('/place', async (req, res) => {
-	const {content, addrName, date, memo, rating} = req.body;
-	const sql = `INSERT INTO place_list (NAME, TITLE, ADDR, DATE, MEMO, RATING, REG_DATE) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	const {idx, position, content, addrName, date, memo, rating} = req.body;
+	const sql = `INSERT INTO place_list (IDX, NAME, TITLE, POS_LAT, POS_LNG, ADDR, DATE, MEMO, RATING, REG_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 	try {
-		const nowTime = new Date().toISOString().replace()
 		const connect = await connectDB();
-		const [results] = await connect.execute(sql, ['name', content, addrName, date, memo, rating, ]);
+		const timeOffset = 1000 * 60 * 60 * 9;
+		let nowTime = new Date((new Date()).getTime() + timeOffset).toISOString().replace("T", " ").split('.')[0];
+
+		const [results] = await connect.execute(sql, [idx, 'name', content, position.lat, position.lng, addrName, date, memo, rating, nowTime]);
 
 		console.log('✅ DATA INSERT');
 		res.status(201).json({message:'DATA INSERT SUCCESS'});
