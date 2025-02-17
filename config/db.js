@@ -15,10 +15,7 @@ const connectDB = async () => {
 	try {
 		const connect = await pool.getConnection();
 
-		console.log("✅ Success - DB connected");
-
 		connect.release();
-
 		return connect;
 	} catch (err) {
 		console.error("❌ Fail - DB connected :: \n", err);
