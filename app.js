@@ -75,6 +75,24 @@ app.patch('/place', async (req, res) => {
 	}
 });
 
+
+// 장소 삭제
+app.delete('/place', async (req, res) => {
+	const {idx} = req.query;
+	const sql = 'DELETE FROM place_list WHERE idx = ?';
+
+	try {
+		const connect = await connectDB();
+		const [rows] = await connect.execute(sql, idx ? [idx] : []);
+
+		console.log('✅ Success - data delete');
+		res.status(201).json({message:'Success - data delete', data: rows});
+	} catch (err) {
+		console.error("❌ Fail - data delete :: \n", err);
+		res.status(500).json({ error: "Fail - data delete" });
+	}
+});
+
 app.listen(port, () => {
 	console.log('🚀 Server start');
 });
