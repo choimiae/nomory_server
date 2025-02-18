@@ -18,13 +18,13 @@ const getPlace = async (req, res, next) => {
 
 // 장소 등록
 const addPlace = async (req, res, next) => {
-	const { idx, position, content, addr, date, memo, rating } = req.body;
+	const { idx, pos_lat, pos_lng, content, addr, date, memo, rating } = req.body;
 	const sql = 'INSERT INTO place_list(idx, name, title, pos_lat, pos_lng, addr, memo, date, rating, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 	try {
 		const connect = await connectDB();
 		const nowTime = utils.getCurrentTime();
-		await connect.execute(sql, [idx, 'name', content, position.lat, position.lng, addr, memo, date, rating, nowTime]);
+		await connect.execute(sql, [idx, 'name', content, pos_lat, pos_lng, addr, memo, date, rating, nowTime]);
 		res.status(201).json({ message: 'Success - data insert'});
 	} catch (err) {
 		next(utils.throwError('Fail - data insert', 500));
