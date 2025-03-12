@@ -10,9 +10,9 @@ const getPlace = async (req, res, next) => {
 	try {
 		const connect = await connectDB();
 		const [rows] = await connect.execute(sql, idx ? [idx] : []);
-		res.status(200).json({ message: 'Success - data select', data: rows });
+		res.status(200).json({ message: '장소 검색이 완료되었습니다.', data: rows });
 	} catch (err) {
-		next(utils.throwError('Fail - data select', 500));
+		next(utils.throwError('장소 검색 오류가 발생했습니다..', 500));
 	}
 };
 
@@ -25,9 +25,9 @@ const addPlace = async (req, res, next) => {
 		const connect = await connectDB();
 		const nowTime = utils.getCurrentTime();
 		await connect.execute(sql, [idx, 'name', title, pos_lat, pos_lng, addr, memo, date, rating, nowTime]);
-		res.status(201).json({ message: 'Success - data insert'});
+		res.status(201).json({ message: '장소 등록이 완료되었습니다.'});
 	} catch (err) {
-		next(utils.throwError('Fail - data insert', 500));
+		next(utils.throwError('장소 등록 오류가 발생했습니다.', 500));
 	}
 };
 
@@ -42,12 +42,12 @@ const updatePlace = async (req, res, next) => {
 		const [rows] = await connect.execute(sql, [memo, date, rating, nowTime, idx]);
 
 		if (rows.affectedRows > 0) {
-			res.status(200).json({ message: 'Success - data update' });
+			res.status(200).json({ message: '장소 수정이 완료되었습니다.' });
 		} else {
-			next(utils.throwError('Fail - no matching data', 404));
+			next(utils.throwError('일치하는 장소가 없습니다.', 404));
 		}
 	} catch (err) {
-		next(utils.throwError('Fail - data update', 500));
+		next(utils.throwError('장소 수정 오류가 발생했습니다.', 500));
 	}
 };
 
@@ -59,9 +59,9 @@ const deletePlace = async (req, res, next) => {
 	try {
 		const connect = await connectDB();
 		const [rows] = await connect.execute(sql, [idx]);
-		res.status(200).json({ message: 'Success - data delete', data: rows });
+		res.status(200).json({ message: '장소 삭제가 완료되었습니다.', data: rows });
 	} catch (err) {
-		next(utils.throwError('Fail - data delete', 500));
+		next(utils.throwError('장소 삭제 오류가 발생했습니다.', 500));
 	}
 };
 
