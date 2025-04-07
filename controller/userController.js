@@ -7,7 +7,7 @@ const hashPw = async (password) => {
 }
 
 // 회원가입
-const addUser = async (req, res, next) => {
+const register = async (req, res, next) => {
 	const { id, password, nickname } = req.body;
 	const hashPassword = await hashPw(password);
 	const sql = 'INSERT INTO user_list(id, password, nickname, date) VALUES (?, ?, ?, ?)';
@@ -39,7 +39,16 @@ const checkId = async (req, res, next) => {
 	}
 };
 
+// 로그인
+const login = async (req, res, next) => {
+	const { id, password, nickname } = req.body;
+	const hashPassword = await hashPw(password);
+	const sql = 'INSERT INTO user_list(id, password, nickname, date) VALUES (?, ?, ?, ?)';
+
+};
+
 module.exports = {
-	addUser,
-	checkId
+	register,
+	checkId,
+	login
 };

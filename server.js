@@ -4,7 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
 app.use('/place', placeRoutes);
-app.use('/user', userRoutes);
+app.use('/auth', userRoutes);
 app.use(errorMiddleware);
 
 const PORT = 3001;
