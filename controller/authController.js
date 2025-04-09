@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const connectDB = require('../config/db');
 const utils = require('../utils/utils');
+const jwt = require('jsonwebtoken');
 
 const hashPw = async (password) => {
 	return await bcrypt.hash(password, 10)
@@ -48,15 +49,31 @@ const login = async (req, res, next) => {
 		const [user] = await connect.execute('SELECT * FROM user_list WHERE ID = ?', [id]);
 
 		if(user.length <= 0)
-			return res.status(200).json({ success: false, message: '존재하지 않는 사용자입니다.'});
+			return res.status(200).json({
+				success: false,
+				message: '존재하지 않는 사용자입니다.'
+			});
 
 		const isMatch = await bcrypt.compare(password, user[0].password);
 
 		if(!isMatch) {
-			return res.status(200).json({ success: false, message: '비밀번호가 틀렸습니다.' });
+			return res.status(200).json({
+				success: false,
+				message: '비밀번호가 틀렸습니다.'
+			});
 		}
 
-		return res.status(200).json({ success: true, message: '로그인 되었습니다.'});
+		const token = jwt.sign(
+			{id:user[0].id, nickname:user[0].nickname},
+			process.env.JWT_SECRET,
+			{expiresIn: process.env.JWT_EXPIRES_TIME}
+		)
+
+		return res.status(200).json({
+			success: true,
+			message: '로그인 되었습니다.',
+			token
+		});
 
 	} catch (err) {
 		next(utils.throwError('로그인 오류가 발생했습니다.', 500));

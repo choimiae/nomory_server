@@ -1,10 +1,10 @@
 const app = require('./config/server');
 const placeRoutes = require('./routes/placeRoutes');
-const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
 app.use('/place', placeRoutes);
-app.use('/auth', userRoutes);
+app.use('/auth', authRoutes);
 app.use(errorMiddleware);
 
 const PORT = 3001;
