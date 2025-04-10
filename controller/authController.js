@@ -72,7 +72,9 @@ const login = async (req, res, next) => {
 		return res.status(200).json({
 			success: true,
 			message: '로그인 되었습니다.',
-			token
+			token,
+			id:user[0].id,
+			nickname: user[0].nickname
 		});
 
 	} catch (err) {
@@ -80,8 +82,25 @@ const login = async (req, res, next) => {
 	}
 };
 
+// 토큰 검증
+const verify = async (req, res, next) => {
+	try {
+		const connect = await connectDB();
+		const [user] = await connect.execute('SELECT * FROM user_list WHERE ID = ?', [req.user.id]);
+		if(user.length <= 0) {
+			return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+		}
+
+		return res.json({success:true, user: {id:user[0].id, nickname: user[0].nickname}});
+
+	} catch (err) {
+		next(utils.throwError('토큰 인증 오류가 발생했습니다.', 500));
+	}
+};
+
 module.exports = {
 	register,
 	checkId,
-	login
+	login,
+	verify
 };
