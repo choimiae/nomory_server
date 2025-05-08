@@ -5,7 +5,7 @@ const utils = require('../utils/utils');
 // 폴더 검색
 const getFolder = async (req, res, next) => {
 	const { id } = req.user;
-	let sql = 'SELECT * FROM folder_list WHERE USER_ID = ?';
+	let sql = 'SELECT idx, title, color FROM folder_list WHERE USER_ID = ?';
 
 	try {
 		const connect = await connectDB();
