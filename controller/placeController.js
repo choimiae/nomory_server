@@ -22,14 +22,14 @@ const getPlace = async (req, res, next) => {
 
 // 장소 등록
 const addPlace = async (req, res, next) => {
-	const { idx, pos_lat, pos_lng, title, addr, date, memo, rating } = req.body;
+	const { idx, folder_idx, pos_lat, pos_lng, title, addr, date, memo, rating } = req.body;
 	const { id } = req.user;
-	const sql = 'INSERT INTO place_list(idx, id, title, pos_lat, pos_lng, addr, memo, date, rating, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+	const sql = 'INSERT INTO place_list(idx, id, folder_idx, title, pos_lat, pos_lng, addr, memo, date, rating, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 	try {
 		const connect = await connectDB();
 		const nowTime = utils.getCurrentTime();
-		await connect.execute(sql, [idx, id, title, pos_lat, pos_lng, addr, memo, date, rating, nowTime]);
+		await connect.execute(sql, [idx, id, folder_idx, title, pos_lat, pos_lng, addr, memo, date, rating, nowTime]);
 		res.status(201).json({ message: '장소 등록이 완료되었습니다.'});
 	} catch (err) {
 		next(utils.throwError('장소 등록 오류가 발생했습니다.', 500));
@@ -38,13 +38,13 @@ const addPlace = async (req, res, next) => {
 
 // 장소 수정
 const updatePlace = async (req, res, next) => {
-	const { date, memo, rating, idx } = req.body;
-	const sql = 'UPDATE place_list SET memo = ?, date = ?, rating = ?, mod_date = ? WHERE idx = ?';
+	const { folder_idx, date, memo, rating, idx } = req.body;
+	const sql = 'UPDATE place_list SET folder_idx = ?, memo = ?, date = ?, rating = ?, mod_date = ? WHERE idx = ?';
 
 	try {
 		const connect = await connectDB();
 		const nowTime = utils.getCurrentTime();
-		const [rows] = await connect.execute(sql, [memo, date, rating, nowTime, idx]);
+		const [rows] = await connect.execute(sql, [folder_idx, memo, date, rating, nowTime, idx]);
 
 		if (rows.affectedRows > 0) {
 			res.status(200).json({ message: '장소 수정이 완료되었습니다.' });
