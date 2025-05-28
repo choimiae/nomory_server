@@ -18,14 +18,13 @@ const getFolder = async (req, res, next) => {
 
 // 폴더 등록
 const addFolder = async (req, res, next) => {
-	const { idx, pos_lat, pos_lng, title, addr, date, memo, rating } = req.body;
+	const { title, color } = req.body;
 	const { id } = req.user;
-	const sql = 'INSERT INTO place_list(idx, id, title, pos_lat, pos_lng, addr, memo, date, rating, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+	const sql = 'INSERT INTO folder_list(user_id, title, color) VALUES (?, ?, ?)';
 
 	try {
 		const connect = await connectDB();
-		const nowTime = utils.getCurrentTime();
-		await connect.execute(sql, [idx, id, title, pos_lat, pos_lng, addr, memo, date, rating, nowTime]);
+		await connect.execute(sql, [id, title, color]);
 		res.status(201).json({ message: '폴더 등록이 완료되었습니다.'});
 	} catch (err) {
 		next(utils.throwError('폴더 등록 오류가 발생했습니다.', 500));
