@@ -6,10 +6,10 @@ const utils = require('../utils/utils');
 const getPlace = async (req, res, next) => {
 	const { idx } = req.query;
 	const { id } = req.user;
-	let sql = 'SELECT * FROM place_list WHERE ID = ?';
+	let sql = 'SELECT * FROM place_list WHERE id = ?';
 
 	if(idx)
-		sql = 'SELECT * FROM place_list WHERE ID = ? AND IDX = ?';
+		sql = 'SELECT * FROM place_list WHERE id = ? AND idx = ?';
 
 	try {
 		const connect = await connectDB();

@@ -46,7 +46,7 @@ const login = async (req, res, next) => {
 
 	try {
 		const connect = await connectDB();
-		const [user] = await connect.execute('SELECT * FROM user_list WHERE ID = ?', [id]);
+		const [user] = await connect.execute('SELECT * FROM user_list WHERE id = ?', [id]);
 
 		if(user.length <= 0)
 			return res.status(200).json({
@@ -86,7 +86,7 @@ const login = async (req, res, next) => {
 const verify = async (req, res, next) => {
 	try {
 		const connect = await connectDB();
-		const [user] = await connect.execute('SELECT * FROM user_list WHERE ID = ?', [req.user.id]);
+		const [user] = await connect.execute('SELECT * FROM user_list WHERE id = ?', [req.user.id]);
 		if(user.length <= 0) {
 			return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
 		}

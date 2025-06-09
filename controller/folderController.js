@@ -5,7 +5,7 @@ const utils = require('../utils/utils');
 // 폴더 검색
 const getFolder = async (req, res, next) => {
 	const { id } = req.user;
-	let sql = 'SELECT idx, title, color FROM folder_list WHERE USER_ID = ?';
+	let sql = 'SELECT idx, title, color FROM folder_list WHERE user_id = ?';
 
 	try {
 		const connect = await connectDB();
@@ -33,13 +33,15 @@ const addFolder = async (req, res, next) => {
 
 // 폴더 수정
 const updateFolder = async (req, res, next) => {
-	const { date, memo, rating, idx } = req.body;
-	const sql = 'UPDATE place_list SET memo = ?, date = ?, rating = ?, mod_date = ? WHERE idx = ?';
+	const { idx, title, color } = req.body;
+	const { id } = req.user;
+	const sql = 'UPDATE folder_list SET title = ?, color = ? WHERE user_id = ? AND idx = ?';
 
 	try {
 		const connect = await connectDB();
-		const nowTime = utils.getCurrentTime();
-		const [rows] = await connect.execute(sql, [memo, date, rating, nowTime, idx]);
+		const [rows] = await connect.execute(sql, [title, color, id, idx]);
+
+		console.log(rows)
 
 		if (rows.affectedRows > 0) {
 			res.status(200).json({ message: '폴더 수정이 완료되었습니다.' });
